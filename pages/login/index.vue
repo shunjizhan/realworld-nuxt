@@ -68,6 +68,10 @@ import {
   register,
 } from '@/api/user';
 
+const Cookie = process.client
+  ? require('js-cookie')
+  : undefined
+
 export default {
   name: 'LoginIndex',
   computed: {
@@ -92,11 +96,15 @@ export default {
           ? await login({ user: this.user })
           : await register({ user: this.user })
   
-        // TODO: 保存用户登陆状态
+        // 保存用户登陆状态
+        this.$store.commit('setUser', data.user);
+
+        // 为了防止刷新界面数据丢失，需要把数据持久化
+        Cookie.set('user', data.user);
   
         // 跳转回首页
         // TODO: 为什么这里是$router，上面的$route
-        // TODO: 为什么有些事key（比如computed，methods），有些是method，比如data（）
+        // TODO: 为什么有些是key（比如computed，methods），有些是method，比如data（）
         this.$router.push('/');        
       } catch (e) {
         this.errors = e.response.data.errors;
