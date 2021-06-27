@@ -38,7 +38,8 @@
 
 <script>
 export default {
-  name: 'Settings'
+  name: 'Settings',
+  middleware: 'authenticated',   // 渲染前会先执行中间件
 }
 </script>
 

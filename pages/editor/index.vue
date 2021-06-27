@@ -35,7 +35,8 @@
 
 <script>
 export default {
-  name: 'Editor'
+  name: 'Editor',
+  middleware: 'authenticated',   // 渲染前会先执行中间件
 }
 </script>
 

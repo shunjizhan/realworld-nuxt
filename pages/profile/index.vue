@@ -89,6 +89,7 @@
 <script>
 export default {
   name: 'UserProfile',
+  middleware: 'authenticated',   // 渲染前会先执行中间件
 }
 </script>
 

@@ -74,6 +74,7 @@ const Cookie = process.client
 
 export default {
   name: 'LoginIndex',
+  middleware: 'notAuthenticated',   // 渲染前会先执行中间件
   computed: {
     isLogin () {
       return this.$route.name === 'login'
