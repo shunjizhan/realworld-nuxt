@@ -93,7 +93,8 @@
               :to="{
                 name: 'home',
                 query: {
-                  page: p
+                  page: p,
+                  tag: $route.query.tag,
                 }
               }"
             >
@@ -108,14 +109,19 @@
           <p>Popular Tags</p>
 
           <div class="tag-list">
-            <a href="" class="tag-pill tag-default">programming</a>
-            <a href="" class="tag-pill tag-default">javascript</a>
-            <a href="" class="tag-pill tag-default">emberjs</a>
-            <a href="" class="tag-pill tag-default">angularjs</a>
-            <a href="" class="tag-pill tag-default">react</a>
-            <a href="" class="tag-pill tag-default">mean</a>
-            <a href="" class="tag-pill tag-default">node</a>
-            <a href="" class="tag-pill tag-default">rails</a>
+            <nuxt-link
+              :to="{
+                name: 'home',
+                query: {
+                  tag: t,
+                }
+              }"
+              class="tag-pill tag-default"
+              v-for="t in tags"
+              :key="t"
+            >
+              {{ t }}
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -128,26 +134,36 @@
 
 <script>
 import { getArticles } from '@/api/article';
+import { getTags } from '@/api/tag';
 
 export default {
   name: 'Home',
   async asyncData ({ query }) {
     const curPage = parseInt(query.page) || 1;
     const limit = 2;
+
+    const [articleData, tagData] = await Promise.all([
+      getArticles({
+        limit,
+        offset: (curPage - 1) * limit,
+        tag: query.tag,
+      }),
+      getTags(),
+    ]);
   
     const { data: {
       articles,
       articlesCount,
-    } } = await getArticles({
-      limit,
-      offset: (curPage - 1) * limit
-    });
+    } } = articleData;
+
+    const { data: { tags } } = tagData;
 
     return {
       articles, 
       articlesCount,
       limit,
       curPage,
+      tags,
     }
   },
   computed: {
@@ -155,7 +171,7 @@ export default {
       return Math.ceil(this.articlesCount / this.limit)
     }
   },
-  watchQuery: ['page'],
+  watchQuery: ['page', 'tag'],
 }
 </script>
 

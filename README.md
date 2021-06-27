@@ -60,3 +60,38 @@ export default {
 }
 ```
 这样在page参数改变的时候，asyncData会被重新调用更新数据，从而更新界面
+
+## 6) 标签列表
+跟拿articleData类似，我们写一个getTags()包装好tags的api，从这个接口拿tags数据，然后渲染到界面上。
+
+#### 注意1
+这里有一个优化操作，因为getTags()和getArticles()没有相互依赖的关系，所以可以让他们并行运行，加快速度。
+```ts
+const [articleData, tagData] = await Promise.all([
+  getArticles({ ... }),
+  getTags(),
+]);
+
+// 注意这里不能加await，否则还是会串行，因为getTags()返回一个promise，如果await它就会等它resolve才会继续运行
+// 我们要先创建promise，让Promise.all来等它resolve，而不是在创建的时候就等它resolve
+const [articleData, tagData] = await Promise.all([
+  await getArticles({ ... }),   // wrong!!
+  await getTags(),              // wrong!!
+]);
+```
+
+#### 注意2
+点击页码跳转的时候，我们应该要相同的tag query，所以在nuxt-link的:to里面，也要加上现在的tag
+```html
+<nuxt-link
+  class="page-link"
+  :to="{
+    name: 'home',
+    query: {
+      page: p,
+      tag: $route.query.tag,
+    }
+  }"
+>
+```
+
