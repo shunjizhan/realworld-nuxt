@@ -14,12 +14,54 @@
       <div class="col-md-9">
         <div class="feed-toggle">
           <ul class="nav nav-pills outline-active">
-            <li class="nav-item">
-              <a class="nav-link disabled" href="">Your Feed</a>
+            <li v-if="user" class="nav-item">
+              <nuxt-link
+                exact
+                class="nav-link"
+                :class="{ active: tab === 'your_feed' }"
+                :to="{
+                  name: 'home',
+                  query: {
+                    tab: 'your_feed',
+                  }
+                }"
+              >
+                <i class="ion-star"></i> Your Feed
+              </nuxt-link>
             </li>
+
             <li class="nav-item">
-              <a class="nav-link active" href="">Global Feed</a>
+              <nuxt-link
+                exact
+                class="nav-link"
+                :class="{ active: tab === 'glob_feed' }"
+                :to="{
+                  name: 'home',
+                  query: {
+                    tab: 'glob_feed',
+                  },
+                }"
+              >
+                <i class="ion-earth"></i> Global Feed
+              </nuxt-link>
             </li>
+
+            <li v-if="curTag" class="nav-item">
+              <nuxt-link
+                class="nav-link"
+                :class="{ active: tab === 'tag' }"
+                :to="{
+                  name: 'home',
+                  query: {
+                    tab: 'tag',
+                    tag: curTag,
+                  },
+                }"
+              >
+                <i class="ion-bookmark"></i> {{ curTag }}
+              </nuxt-link>
+            </li>
+
           </ul>
         </div>
 
@@ -42,13 +84,13 @@
 
             <div class="info">
               <nuxt-link
-              :to="{
-                  name: 'profile',
-                  params: {
-                    username: a.author.username,
-                  }
-                }" 
-              >
+                :to="{
+                    name: 'profile',
+                    params: {
+                      username: a.author.username,
+                    }
+                  }" 
+                >
                 {{ a.author.username }}
                 <span class="data">
                   {{ a.createdAt }}
@@ -95,6 +137,7 @@
                 query: {
                   page: p,
                   tag: $route.query.tag,
+                  tab,
                 }
               }"
             >
@@ -114,6 +157,7 @@
                 name: 'home',
                 query: {
                   tag: t,
+                  tab: 'tag',
                 }
               }"
               class="tag-pill tag-default"
@@ -135,18 +179,20 @@
 <script>
 import { getArticles } from '@/api/article';
 import { getTags } from '@/api/tag';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Home',
   async asyncData ({ query }) {
     const curPage = parseInt(query.page) || 1;
     const limit = 2;
+    const { tag: curTag } = query;
 
     const [articleData, tagData] = await Promise.all([
       getArticles({
         limit,
         offset: (curPage - 1) * limit,
-        tag: query.tag,
+        curTag,
       }),
       getTags(),
     ]);
@@ -164,14 +210,17 @@ export default {
       limit,
       curPage,
       tags,
+      curTag,
+      tab: query.tab || 'global_feed',
     }
   },
   computed: {
     totalPage () {
       return Math.ceil(this.articlesCount / this.limit)
-    }
+    },
+    ...mapState(['user']),
   },
-  watchQuery: ['page', 'tag'],
+  watchQuery: ['page', 'tag', 'tab'],
 }
 </script>
 

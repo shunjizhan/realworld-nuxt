@@ -95,3 +95,9 @@ const [articleData, tagData] = await Promise.all([
 >
 ```
 
+## 7) tab query以及tab导航
+接下来处理三种不同的tab:{ glob_feed, your_feed, tag },这三个tab分别对应不同的内容,他们都是同一个主页route里面的内容('/')，根据query里面tab的不同，在页面内显示不一样的内容。
+
+首先在asyncData里面把query里面的tab和tag返回，传给组件。然后tab的导航就根据这些数据做成三个不同的链接。用v-if + user决定是否显示，:class动态类名来动态改变样式。
+
+还要把各种nuxt-link的query更新一下，确保几个query共存的时候不会互相overwrite掉。比如tag=xxx的时候，点击页码，应该会导航到?tag=xxx&page=3
