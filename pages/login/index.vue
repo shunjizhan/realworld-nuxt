@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: 'login index',
+  name: 'LoginIndex',
   computed: {
     isLogin() {
       return this.$route.name === 'login'
