@@ -44,3 +44,6 @@ export default {
   middleware: 'authenticated',   // 渲染前会先执行中间件
 }
 ```
+
+## 4) 从article接口拿数据并显示
+用getArticles()包装article的数据接口，在layout里面用asyncData()调用这个接口，就可以异步拿到article的数据。然后在laytout的模板里面直接使用这些数据,就能显示article的详情了。
