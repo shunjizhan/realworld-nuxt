@@ -47,3 +47,16 @@ export default {
 
 ## 4) 从article接口拿数据并显示
 用getArticles()包装article的数据接口，在layout里面用asyncData()调用这个接口，就可以异步拿到article的数据。然后在laytout的模板里面直接使用这些数据,就能显示article的详情了。
+
+## 5) 分页
+通过asyncData({ query })可以拿到query(page = xxx)，加上上一步拿到的article数据，我们可以：
+- 给getArticles()传limit和offset参数，拿到当前页面的article data，而不需要拿到全部data
+- 在computed里面计算总共有多少页，然后渲染出相应个数的的底部跳转链接。
+
+默认情况下，query改变不会调用asyncData（为了提高性能）。如果要监听这个行为，可以用到watchQuery。
+```ts
+export default {
+  watchQuery: ['page'],
+}
+```
+这样在page参数改变的时候，asyncData会被重新调用更新数据，从而更新界面

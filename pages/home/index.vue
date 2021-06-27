@@ -80,6 +80,29 @@
 
       </div>
 
+      <nav>
+        <ul class="pagination">
+          <li
+            class="page-item"
+            :class="{ active: p === curPage}"
+            v-for="p in totalPage"
+            :key="p"
+          >
+            <nuxt-link
+              class="page-link"
+              :to="{
+                name: 'home',
+                query: {
+                  page: p
+                }
+              }"
+            >
+              {{ p }}
+            </nuxt-link>
+          </li>
+        </ul>
+      </nav>
+
       <div class="col-md-3">
         <div class="sidebar">
           <p>Popular Tags</p>
@@ -108,17 +131,31 @@ import { getArticles } from '@/api/article';
 
 export default {
   name: 'Home',
-  async asyncData () {
+  async asyncData ({ query }) {
+    const curPage = parseInt(query.page) || 1;
+    const limit = 2;
+  
     const { data: {
       articles,
       articlesCount,
-    } } = await getArticles();
+    } } = await getArticles({
+      limit,
+      offset: (curPage - 1) * limit
+    });
 
     return {
       articles, 
       articlesCount,
+      limit,
+      curPage,
     }
-  }
+  },
+  computed: {
+    totalPage () {
+      return Math.ceil(this.articlesCount / this.limit)
+    }
+  },
+  watchQuery: ['page'],
 }
 </script>
 
