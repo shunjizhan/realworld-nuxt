@@ -1,0 +1,16 @@
+[
+  {
+    "name": "layout",
+    "path": "/layout",
+    "component": "/Users/shunjizhan/projects/realworld-nuxtjs/pages/layout/index.vue",
+    "chunkName": "pages/layout/index",
+    "_name": "_4de0d0e8"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/shunjizhan/projects/realworld-nuxtjs/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_c5833afa"
+  }
+]
