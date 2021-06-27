@@ -1,5 +1,6 @@
 export default {
   router: {
+    linkActiveClass: 'active',
     extendRoutes(routes, resolve) {
       routes.splice(0);   // 清空基于pages/默认生成的路由表规则，方便重写
       routes.push(...[{
