@@ -207,3 +207,8 @@ export default {
 ```
 
 TODO: 本地测试似乎不会在网页上显示出来，但是查Vue的Article的组件是有$metaInfo的？
+
+## 14) 显示comments
+包装一个getComments接口，然后创建一个ArticleComments的组件。
+
+因为我们不需要comments作为SEO，所以挂载之后在mounted里面aync拿comments，存到this.comments里面。需要用到的article.slug可以作为prop从父组件传过来。

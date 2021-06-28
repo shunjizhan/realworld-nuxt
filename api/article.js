@@ -26,3 +26,8 @@ export const getArticleDetails = slug => request({
   method: 'GET',
   url: `/api/articles/${slug}`,
 });
+
+export const getComments = slug => request({
+  method: 'GET',
+  url: `/api/articles/${slug}/comments`,
+});

@@ -204,7 +204,7 @@ export default {
       _getArticles({
         limit,
         offset: (curPage - 1) * limit,
-        curTag,
+        tag: curTag,
       }),
       getTags(),
     ]);
