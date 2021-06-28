@@ -186,3 +186,24 @@ methods: {
 在文章界面，要两次显示文章meta，所以我们可以抽象出一个组件，然后把article data当做prop传给它，它会根据prop渲染。
 - 我们在article/里面加入了components/article-meta,定义好模板和props。
 - 然后在需要使用的home里面注册它，就可以在模板中使用并且传入article作为prop。
+
+## 13) SEO 优化
+为了优化SEO，我们可以给网页的head里面加上一些metadata，包括title，description等。这个可以用vue里面的head()来实现。
+```ts
+export default {
+  head () {
+    return {
+      title: `${this.article.title} - RealWorld`,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.article.description,
+        }
+      ],
+    }
+  },
+}
+```
+
+TODO: 本地测试似乎不会在网页上显示出来，但是查Vue的Article的组件是有$metaInfo的？
