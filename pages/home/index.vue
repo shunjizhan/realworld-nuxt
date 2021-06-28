@@ -92,10 +92,10 @@
                   }" 
                 >
                 {{ a.author.username }}
-                <span class="data">
-                  {{ a.createdAt }}
-                </span>
               </nuxt-link>
+              <span class="data">
+                {{ a.createdAt | date }}
+              </span>
             </div>
             <button
               class="btn btn-outline-primary btn-sm pull-xs-right"

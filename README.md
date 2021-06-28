@@ -132,3 +132,18 @@ export default (context) => {
 ```
 
 TODO: 似乎服务端渲染会出问题。跳转http://localhost:3000/?tab=your_feed的话是没问题的，但是刷新界面就会401.
+
+## 9) 统一format日期
+设置另一个plugin
+```ts
+// plugins/dayjs.js
+Vue.filter('date', (value, format='YYYY.MM.DD') => {
+  return dayjs(value).format(format);
+});
+```
+这里等于创建了一个名为date的filter，然后在需要过滤的地方可以pipe这个filter
+```html
+<span class="data">
+  {{ a.createdAt | date }}
+</span>
+````
