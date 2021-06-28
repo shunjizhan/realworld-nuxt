@@ -21,3 +21,8 @@ export const deleteFavorite = slug => request({
   method: 'DELETE',
   url: `/api/articles/${slug}/favorite`,
 });
+
+export const getArticleDetails = slug => request({
+  method: 'GET',
+  url: `/api/articles/${slug}`,
+});

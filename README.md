@@ -170,3 +170,14 @@ methods: {
 }
 ```
 这里一个小技巧就是用article.favoriteDisabled来让按钮暂时无法点击，一直等到点赞请求返回以后，才设置回true，防止用户等待的时候重复点击。
+
+// TODO:测试点赞刷新完似乎点赞数又会回来，但是查看点赞的xhr明明已经成功了，难道是后端的延迟？
+
+## 11) 显示文章内容
+- 封装一个接口getArticleDetails
+- 然后在article index的asyncData()里面可以从params里面拿到slug
+- 有了slug就调用接口拿到文章数据
+- 用包转换成html的格式，因为要支持markdwon
+- 用v-html注入模板
+
+// TODO:如果想要SEO和首屏性能，就要放到asyncData()里面？为什么？
