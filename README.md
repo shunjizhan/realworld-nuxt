@@ -132,6 +132,7 @@ export default (context) => {
 ```
 
 TODO: 似乎服务端渲染会出问题。跳转http://localhost:3000/?tab=your_feed的话是没问题的，但是刷新界面就会401.
+TODO: token的话怎么处理token泄露的问题？因为直接是在request里面的，所以可以直接被黑客拿到。这个签名的解决方案有什么优劣？
 
 ## 9) 统一format日期
 设置另一个plugin
@@ -212,3 +213,23 @@ TODO: 本地测试似乎不会在网页上显示出来，但是查Vue的Article�
 包装一个getComments接口，然后创建一个ArticleComments的组件。
 
 因为我们不需要comments作为SEO，所以挂载之后在mounted里面aync拿comments，存到this.comments里面。需要用到的article.slug可以作为prop从父组件传过来。
+
+## 打包和部署
+**流程**
+- 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/
+- github账号创建一个token，然后放到项目的token里面，用来授权。
+- 把服务器地址ssh需要的参数也加进项目的secrets里面，包括账号密码，ip等
+- 添加.github/workflows/main.yml用来指导构建流程
+  - 下载源码
+  - 打包构建
+  - 把构建结果发布 Release
+  - ssh进服务器
+    - wget下载最新的release
+    - 解压
+    - 安装依赖
+    - 启动服务
+
+**触发**
+为当前commit创建一个tag并且触发github actions，因为main.yml中设置了只监听v*的commit
+`git tag v0.1.0`
+`git push origin v0.1.0`
