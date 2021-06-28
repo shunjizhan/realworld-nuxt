@@ -181,3 +181,8 @@ methods: {
 - 用v-html注入模板
 
 // TODO:如果想要SEO和首屏性能，就要放到asyncData()里面？为什么？
+
+## 12) 显示文章meta
+在文章界面，要两次显示文章meta，所以我们可以抽象出一个组件，然后把article data当做prop传给它，它会根据prop渲染。
+- 我们在article/里面加入了components/article-meta,定义好模板和props。
+- 然后在需要使用的home里面注册它，就可以在模板中使用并且传入article作为prop。

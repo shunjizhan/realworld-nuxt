@@ -192,7 +192,7 @@ export default {
   name: 'Home',
   async asyncData ({ query, store }) {
     const curPage = parseInt(query.page) || 1;
-    const limit = 2;
+    const limit = 10;
     const { tag: curTag } = query;
     const tab = query.tab || 'global_feed'
 
