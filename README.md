@@ -146,4 +146,27 @@ Vue.filter('date', (value, format='YYYY.MM.DD') => {
 <span class="data">
   {{ a.createdAt | date }}
 </span>
-````
+```
+
+## 10) 处理点赞
+根据接口包装了两个函数addFavorite和deleteFavorite，然后给home增加一个处理点赞的方法
+```ts
+methods: {
+  async onFavorite (article) {
+    const { favorited, slug } = article;
+
+    article.favoriteDisabled = true;
+    if (favorited) {
+      await deleteFavorite(slug);
+      article.favorited = false;
+      article.favoritesCount -= 1;
+    } else {
+      await addFavorite(slug);
+      article.favorited = true;
+      article.favoritesCount += 1;
+    }
+    article.favoriteDisabled = false;
+  }
+}
+```
+这里一个小技巧就是用article.favoriteDisabled来让按钮暂时无法点击，一直等到点赞请求返回以后，才设置回true，防止用户等待的时候重复点击。
