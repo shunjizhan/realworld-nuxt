@@ -2,7 +2,7 @@
   <div>
          <nav class="navbar navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="index.html">conduit</a>
+        <a class="navbar-brand" href="index.html">Bitcoin to the moon!</a>
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <nuxt-link

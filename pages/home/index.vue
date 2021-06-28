@@ -3,8 +3,8 @@
 
   <div class="banner">
     <div class="container">
-      <h1 class="logo-font">conduit</h1>
-      <p>A place to share your knowledge.</p>
+      <h1 class="logo-font">Real Crypto World</h1>
+      <p>A place to witness a decentralized future</p>
     </div>
   </div>
 
