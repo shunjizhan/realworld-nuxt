@@ -177,19 +177,24 @@
 </template>
 
 <script>
-import { getArticles } from '@/api/article';
+import { getArticles, getFeedArticles } from '@/api/article';
 import { getTags } from '@/api/tag';
 import { mapState } from 'vuex';
 
 export default {
   name: 'Home',
-  async asyncData ({ query }) {
+  async asyncData ({ query, store }) {
     const curPage = parseInt(query.page) || 1;
     const limit = 2;
     const { tag: curTag } = query;
+    const tab = query.tab || 'global_feed'
+
+    const _getArticles = (tab === 'your_feed') && store.state.user
+      ? getFeedArticles
+      : getArticles
 
     const [articleData, tagData] = await Promise.all([
-      getArticles({
+      _getArticles({
         limit,
         offset: (curPage - 1) * limit,
         curTag,
@@ -211,7 +216,7 @@ export default {
       curPage,
       tags,
       curTag,
-      tab: query.tab || 'global_feed',
+      tab,
     }
   },
   computed: {

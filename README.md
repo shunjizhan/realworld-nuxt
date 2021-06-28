@@ -101,3 +101,34 @@ const [articleData, tagData] = await Promise.all([
 首先在asyncData里面把query里面的tab和tag返回，传给组件。然后tab的导航就根据这些数据做成三个不同的链接。用v-if + user决定是否显示，:class动态类名来动态改变样式。
 
 还要把各种nuxt-link的query更新一下，确保几个query共存的时候不会互相overwrite掉。比如tag=xxx的时候，点击页码，应该会导航到?tag=xxx&page=3
+
+## 8) 统一设置用户token
+和glob_feed不同，在请求your_feed的时候，header中需要带上用户的token，才能授权查询（以及知道是哪个用户）。解决办法：
+- 我们可以在每个需要用户token的reques里面手动设置header，但是这样很费时费力，每次新加一个不同的请求就要加一次header
+- 可以用请求拦截器统一添加header
+
+拦截器就是在request里面做统一的操作，那怎么样才能从拦截器里面拿到用户的token呢？这里可以用到nuxt里面的plugin，在config里面设置以后，nuxt会自动调用plugin，并且把context传进来，我们就可以从context里面拿到所有需要的信息。
+
+之前我们的utils/request是没有经过拦截器处理的，所以我们把所有用到request的地方统一换成plugin/request.js这个经过拦截器的request，然后拦截器就会在有user的情况下，自动加入header。
+
+```ts
+// plugin/request.js
+export const request = axios.create({
+  baseURL: 'https://conduit.productionready.io',
+});
+
+export default (context) => {
+  const { user } = context.store.state;
+
+  // 请求拦截器：任何请求都要经过它，可以做一个公共的业务处理，例如统一设置token
+  request.interceptors.request.use(config => {
+    if (user && user.token) {
+      config.headers.Authorization = `Token ${ user.token }`;
+    }
+
+    return config;
+  }, Promise.reject);
+}
+```
+
+TODO: 似乎服务端渲染会出问题。跳转http://localhost:3000/?tab=your_feed的话是没问题的，但是刷新界面就会401.
