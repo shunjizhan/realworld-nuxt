@@ -31,3 +31,11 @@ export const getComments = slug => request({
   method: 'GET',
   url: `/api/articles/${slug}/comments`,
 });
+
+export const createArticle = article => request({
+  method: 'POST',
+  url: `/api/articles`,
+  data: { article },
+});
+
+

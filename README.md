@@ -213,7 +213,12 @@ TODO: 本地测试似乎不会在网页上显示出来，但是查Vue的Article�
 包装一个getComments接口，然后创建一个ArticleComments的组件。
 
 因为我们不需要comments作为SEO，所以挂载之后在mounted里面aync拿comments，存到this.comments里面。需要用到的article.slug可以作为prop从父组件传过来。
+## 15) 创建文章功能
+包装一个createArticle接口，注意这里传入的文章数据不是params，而是body，所以在axios里面是用data，而不是用param。意思就是说我们这些data是内在传输的，直接POST /article接口，而不是POST /article?title=xxx&description=xxx...
 
+在Editor组件里面，用v-model绑定几个文章数据，包括title，description等，然后submit的时候传进来就好。
+
+submit以后，用`this.$router.push(`/article/${slug}`);`跳转到新建的文章界面。
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/
