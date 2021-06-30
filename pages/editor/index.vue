@@ -34,7 +34,11 @@
 </template>
 
 <script>
-import { createArticle } from '@/api/article';
+import {
+  createArticle,
+  updateArticle,
+  getArticleDetails,
+} from '@/api/article';
 
 export default {
   name: 'Editor',
@@ -67,14 +71,35 @@ export default {
         description,
         tagList: tags.split(' '),
       }
-      const { data: { article: { slug } } } = await createArticle(article);
+
+      const { slug: oldSlug } = this.$route.params;
+      let slug;
+      if (!!oldSlug) {
+        const { data }= await updateArticle(oldSlug, article);
+        slug = data.article.slug;
+      } else {
+        const { data }= await createArticle(article);
+        slug = data.article.slug;
+      }
 
       this.publishing = false;
 
       // redirect to the the article page
       this.$router.push(`/article/${slug}`);
     }
-  }
+  },
+  async asyncData ({ params: { slug } }) {
+    let data = {}
+    if (!!slug) {
+      const { data: { article } } = await getArticleDetails(slug);
+      data = article;
+      data.tags = article.tagList.join(' ');
+    }
+
+    return {
+      article: { ...data },
+    }    
+  },
 }
 </script>
 

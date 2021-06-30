@@ -35,7 +35,7 @@ export default {
           },
           {
             name: 'editor',
-            path: '/editor', 
+            path: '/editor/:slug?', 
             component: resolve(__dirname, 'pages/editor/'),
           },
           {

@@ -219,6 +219,23 @@ TODO: 本地测试似乎不会在网页上显示出来，但是查Vue的Article�
 在Editor组件里面，用v-model绑定几个文章数据，包括title，description等，然后submit的时候传进来就好。
 
 submit以后，用`this.$router.push(`/article/${slug}`);`跳转到新建的文章界面。
+
+## 16) 文章的更新和删除功能
+包装好删除和更新的函数updateArticle和deleteArticle。
+
+在article-meta组件里面选择一下，如果有user的换就显示delete和edit按钮。
+
+delete按钮就直接调用deleteArticle。
+
+edit的话要跳到/article/:slug，所以要更新一下route，让slug变成可选的
+```ts
+{
+  name: 'editor',
+  path: '/editor/:slug?', 
+  component: resolve(__dirname, 'pages/editor/'),
+},
+```
+然后在editor里面，可以通过this.$route.params拿到slug，slug如果不是undefined说明是create，如果有slug说明是edit。如果有slug的话，在asyncData()里面异步拿到文章的数据，覆盖之前的默认空的文章数据，同步到文本框里面，这样就可以实现edit之前的内容。
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/

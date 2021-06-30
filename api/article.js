@@ -38,4 +38,15 @@ export const createArticle = article => request({
   data: { article },
 });
 
+export const updateArticle = (slug, article) => request({
+  method: 'PUT',
+  url: `/api/articles/${slug}`,
+  data: { article },
+});
+
+export const deleteArticle = slug => request({
+  method: 'DELETE',
+  url: `/api/articles/${slug}`,
+});
+
 

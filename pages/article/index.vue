@@ -15,6 +15,12 @@
 
     <div class="row article-content">
       <div class="col-md-12" v-html="article.body"></div>
+
+      <ul class="tag-list">
+          <li class="tag-default tag-pill tag-outline ng-binding ng-scope" v-for="t in article.tagList" :key="t">
+            {{ t }}
+          </li>
+      </ul>
     </div>
 
     <hr />
