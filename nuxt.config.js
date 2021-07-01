@@ -25,7 +25,7 @@ export default {
           },
           {
             name: 'profile',
-            path: '/profile/:username', 
+            path: '/profile/:username/:tab?', 
             component: resolve(__dirname, 'pages/profile/'),
           },
           {
