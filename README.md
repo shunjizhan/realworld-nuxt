@@ -239,6 +239,19 @@ edit的话要跳到/article/:slug，所以要更新一下route，让slug变成�
 
 ## 17) 添加评论和删除评论
 包装了接口以后，提取一个公用的函数refreshcommments,这个函数在mounted，addcomment和deletecomment以后都调用一下。
+
+## 18) Settings界面
+UpdateUser跟之前的都差不多，就是mounted的时候fetch data，用v-model绑定表单数据。
+
+logout的话就是从本地和vuex的store里面移除user，然后跳转
+```ts
+logout () {
+  Cookie.remove('user');
+  this.$store.commit('setUser', null);
+
+  this.$router.push(`/`)
+}
+```
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/

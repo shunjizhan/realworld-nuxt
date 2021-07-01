@@ -11,3 +11,14 @@ export const register = data => request({
   url: '/api/users',
   data,
 });
+
+export const getUser = () => request({
+  method: 'GET',
+  url: '/api/user',
+});
+
+export const updateUser = user => request({
+  method: 'PUT',
+  url: '/api/user',
+  data: { user },
+});
