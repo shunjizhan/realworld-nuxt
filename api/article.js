@@ -32,6 +32,17 @@ export const getComments = slug => request({
   url: `/api/articles/${slug}/comments`,
 });
 
+export const postComments = (slug, comment) => request({
+  method: 'POST',
+  url: `/api/articles/${slug}/comments`,
+  data: { ...comment },
+});
+
+export const deleteComments = (slug, id) => request({
+  method: 'DELETE',
+  url: `/api/articles/${slug}/comments/${id}`,
+});
+
 export const createArticle = article => request({
   method: 'POST',
   url: `/api/articles`,

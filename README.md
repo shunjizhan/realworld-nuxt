@@ -236,6 +236,9 @@ edit的话要跳到/article/:slug，所以要更新一下route，让slug变成�
 },
 ```
 然后在editor里面，可以通过this.$route.params拿到slug，slug如果不是undefined说明是create，如果有slug说明是edit。如果有slug的话，在asyncData()里面异步拿到文章的数据，覆盖之前的默认空的文章数据，同步到文本框里面，这样就可以实现edit之前的内容。
+
+## 17) 添加评论和删除评论
+包装了接口以后，提取一个公用的函数refreshcommments,这个函数在mounted，addcomment和deletecomment以后都调用一下。
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/
