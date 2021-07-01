@@ -12,7 +12,7 @@
             {{ user.bio }}
           </p>
           <button class="btn btn-sm btn-outline-secondary action-btn">
-            <nuxt-link v-if="user" :to="{
+            <nuxt-link v-if="curUser.username === user.username" :to="{
               name: 'settings',
             }">
               <i class="ion-gear-b"></i>
@@ -58,31 +58,8 @@
         </div>
 
         <div v-for="a in articles" class="article-preview" :key="a.slug">
-          <div class="article-meta">
-            <nuxt-link :to="{
-              name: 'profile',
-              params: {
-                username: a.author.username,
-              }
-            }"><img :src="a.author.image" /></nuxt-link>
-            <div class="info">
-              <a href="" class="author">{{ a.author.username }}</a>
-              <span class="date">{{ a.createdAt }}</span>
-            </div>
-            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-              <i class="ion-heart"></i> {{ a.favoritesCount }}
-            </button>
-          </div>
-          <nuxt-link :to="{
-            name: 'article',
-            params: {
-              slug: a.slug,
-            }
-          }" class="preview-link">
-            <h1>{{ a.title }}</h1>
-            <p>{{ a.description }}</p>
-            <span>Read more...</span>
-          </nuxt-link>
+          <div v-if="isLoading">Loading...</div>
+          <ArticlePreview v-else :article="a"/>
         </div>
 
       </div>
@@ -95,6 +72,9 @@
 
 <script>
 import { getArticles } from '@/api/article';
+import { getUserProfile } from '@/api/user';
+import ArticlePreview from '../article/components/article-preview.vue';
+
 import { mapState } from 'vuex';
 
 export default {
@@ -103,6 +83,8 @@ export default {
   data () {
     return {
       articles: [],
+      user: {},
+      isLoading: false,
     };
   },
   async asyncData ({ query }) {
@@ -110,19 +92,30 @@ export default {
       tab: query.tab,
     }
   },
-  computed: {
-    ...mapState(['user']),
-  },
+  computed: mapState({
+    curUser: state => state.user,
+  }),
   async mounted() {
-    await this.fetchArticles();
+    await this.refresh();
   },
   methods: {
+    async refresh() {
+      // 必须串行：先拿username，再fetch他的Article
+      await this.fetchUserData();
+      await this.fetchArticles();
+    },
+    async fetchUserData () {
+      const { data } = await getUserProfile(this.$route.params.username);
+      this.user = data.profile;
+    },
     async fetchArticles () {
       const fetch = this.$route.params.tab === 'favorite'
         ? this.getFavoritedArticles
         : this.getUserArticles;
       
+      this.isLoading = true;
       await fetch();
+      this.isLoading = false;
     },
     async getUserArticles () {
       const { data } = await getArticles({ author: this.user.username });
@@ -135,8 +128,11 @@ export default {
   },
   watch: {
     // call again the method if the route changes
-    $route: 'fetchArticles'
+    $route: 'refresh'
   },
+  components: {
+    ArticlePreview,
+  }
 }
 </script>
 

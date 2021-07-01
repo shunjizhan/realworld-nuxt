@@ -266,7 +266,34 @@ logout () {
 }
 ```
 
+## 20) Profile界面
+需要存两个user：
+- 这个profile的user，可以根据mounted()里用this.$route.params.username调用包装好的getUserProfile
+- 登陆的user，这个就用mapState从vuex里面拿就好
 
+有两个不同的tab
+- profile/:username
+- profile/:username/:tab?   (tab只能是favorite)
+
+在fetch data的时候，根据this.$route.params.tab判断是fetch user article还是fetch favorite article。
+
+在切换tab的时候，只有route change，但是结果都是指向Profile这个component，所以不会重新触发mounted()，所以就不会重新拿数据。这里可以用到
+```ts
+watch: {
+  // call again the method if the route changes
+  '$route': 'refresh'
+},
+```
+这样在this.$route变化的时候，会重新触发refresh()
+
+还有一点注意就是在refresh里面不能并行async，因为要先拿到当前的profile user数据，再调用getUserProfile拿他的详细信息。
+```ts
+async refresh() {
+  // 必须串行：先拿username，再fetch他的Article
+  await this.fetchUserData();   
+  await this.fetchArticles();
+},
+```
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/
