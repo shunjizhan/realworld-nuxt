@@ -253,21 +253,20 @@ logout () {
 }
 ```
 
-## 19) Profile界面
-有两个不同的tab
-- profile/:username
-- profile/:username/:tab?   (tab只能是favorite)
 
-所以在fetch data的时候，根据this.$route.params.tab判断是fetch user article还是fetch favorite article。
+## 19) factor out AritclePreivew component
+因为在profile里也需要article preview，跟home重复了，所以我们提炼一个AritclePreivew component出来，把article data当做 prop传给它能render。
 
-在切换tab的时候，只有route change，但是结果都是指向Profile这个component，所以不会重新触发mounted()，所以就不会重新拿数据。这里可以用到
+记住一个component用另一个component的时候，要注册它
 ```ts
-watch: {
-  // call again the method if the route changes
-  '$route': 'fetchData'
-},
+{
+  components: {
+    ArticlePreview,
+  }
+}
 ```
-这样在this.$route变化的时候，会重新触发fetchData()
+
+
 ## 打包和部署
 **流程**
 - 在nuxt config里面配置host + port，host是0.0.0.0，监听所有地址，host是3000，最后我们的项目地址就是http://117.50.37.185:3000/

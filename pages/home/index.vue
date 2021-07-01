@@ -70,56 +70,7 @@
           v-for="a in articles"
           :key="a.slug"
         >
-          <div class="article-meta">
-            <nuxt-link
-             :to="{
-               name: 'profile',
-               params: {
-                 username: a.author.username,
-               }
-             }" 
-            >
-              <img :src="a.author.image">
-            </nuxt-link>
-
-            <div class="info">
-              <nuxt-link
-                :to="{
-                    name: 'profile',
-                    params: {
-                      username: a.author.username,
-                    }
-                  }" 
-                >
-                {{ a.author.username }}
-              </nuxt-link>
-              <span class="data">
-                {{ a.createdAt | date }}
-              </span>
-            </div>
-            <button
-              class="btn btn-outline-primary btn-sm pull-xs-right"
-              :class="{ active: a.favorited }"
-              @click="onFavorite(a)"
-              :disabled="a.favoriteDisabled"
-            >
-              <i class="ion-heart"></i> {{ a.favoritesCount }}
-            </button>
-          </div>
-
-          <nuxt-link
-            :to="{
-              name: 'article',
-              params: {
-                slug: a.slug,
-              }
-            }"
-            class="preview-link"
-          >
-            <h1>{{ a.title }}</h1>
-            <p>{{ a.description }}</p>
-            <span>Read more...</span>
-          </nuxt-link>
+          <ArticlePreview :article="a"/>
         </div>
 
       </div>
@@ -182,11 +133,11 @@
 import {
   getArticles,
   getFeedArticles,
-  addFavorite,
-  deleteFavorite,
 } from '@/api/article';
 import { getTags } from '@/api/tag';
 import { mapState } from 'vuex';
+
+import ArticlePreview from '../article/components/article-preview.vue';
 
 export default {
   name: 'Home',
@@ -235,23 +186,9 @@ export default {
     ...mapState(['user']),
   },
   watchQuery: ['page', 'tag', 'tab'],
-  methods: {
-    async onFavorite (article) {
-      const { favorited, slug } = article;
-
-      article.favoriteDisabled = true;
-      if (favorited) {
-        await deleteFavorite(slug);
-        article.favorited = false;
-        article.favoritesCount -= 1;
-      } else {
-        await addFavorite(slug);
-        article.favorited = true;
-        article.favoritesCount += 1;
-      }
-      article.favoriteDisabled = false;
-    }
-  }
+  components: {
+    ArticlePreview,
+  },
 }
 </script>
 
